@@ -6,7 +6,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hqgj.facedemo.adapter.ListViewAdapter;
-import com.hqgj.facedemo.view.FaceContainerView;
+import com.hqgj.mylibrary.view.FaceContainerView;
 
 import java.util.ArrayList;
 

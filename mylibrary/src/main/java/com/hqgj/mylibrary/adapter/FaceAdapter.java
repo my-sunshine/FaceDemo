@@ -1,4 +1,4 @@
-package com.hqgj.facedemo.adapter;
+package com.hqgj.mylibrary.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,9 +8,9 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.hqgj.facedemo.R;
-import com.hqgj.facedemo.common.AppContext;
-import com.hqgj.facedemo.utils.DensityUtil;
+import com.hqgj.mylibrary.R;
+import com.hqgj.mylibrary.common.AppContext;
+import com.hqgj.mylibrary.utils.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class FaceAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = inflate.inflate(R.layout.item_chat_face, null, false);
             viewHolder.faceIV = (ImageView) convertView.findViewById(R.id.face_iv);
-            viewHolder.faceIV.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,DensityUtil.dip2px(context, 36)));
+            viewHolder.faceIV.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(context, 36)));
             viewHolder.faceIV.setPadding(DensityUtil.dip2px(context, 0),DensityUtil.dip2px(context, 6),DensityUtil.dip2px(context, 0),DensityUtil.dip2px(context, 6));
             convertView.setTag(viewHolder);
         } else {
@@ -83,7 +83,6 @@ public class FaceAdapter extends BaseAdapter {
             });
         } else {
             int count = AppContext.getInstance().NUM * currentPage + position;
-            // 总共107个表情==
             if (faceMap!=null && count < faceMap.size()) {
                 /*String imageUri = "drawable://" + faceInCurrentPage.get(count);
                 ImageLoader.getInstance().displayImage(imageUri, viewHolder.faceIV);*/

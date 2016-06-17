@@ -40,9 +40,9 @@ public class AppContext extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        initImageLoader();
-        initFaceMap();
-        NUM_PAGE = (int) Math.ceil(mFaceMap.size() / 20.0);
+       // initImageLoader();
+       // initFaceMap();
+       // NUM_PAGE = (int) Math.ceil(mFaceMap.size() / 20.0);
     }
 
     private void initImageLoader() {

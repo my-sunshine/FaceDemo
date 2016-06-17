@@ -110,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"/>
 
-        <com.hqgj.facedemo.view.CirclePageIndicator
+        <com.hqgj.mylibrary.view.indicator.CirclePageIndicator
             android:id="@+id/indicator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

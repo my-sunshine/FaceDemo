@@ -1,4 +1,4 @@
-package com.hqgj.facedemo.view;
+package com.hqgj.mylibrary.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,11 +27,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.hqgj.facedemo.R;
-import com.hqgj.facedemo.adapter.FaceAdapter;
-import com.hqgj.facedemo.adapter.FacePagerAdapter;
-import com.hqgj.facedemo.common.AppContext;
-import com.hqgj.facedemo.utils.DensityUtil;
+import com.hqgj.mylibrary.R;
+import com.hqgj.mylibrary.adapter.FaceAdapter;
+import com.hqgj.mylibrary.adapter.FacePagerAdapter;
+import com.hqgj.mylibrary.common.AppContext;
+import com.hqgj.mylibrary.utils.DensityUtil;
+import com.hqgj.mylibrary.view.indicator.CirclePageIndicator;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ import java.util.Set;
  */
 public class FaceContainerView extends LinearLayout implements View.OnClickListener {
 
-    /** 显示表情页的viewpager */
     private ViewPager viewPager;
     private ImageView showFace;
     private CirclePageIndicator indicator;
@@ -51,19 +51,18 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
     private Button send;
     private EditText editText;
 
-    /** 表情页界面集合 */
     private ArrayList<View> faceViews;
 
     private InputMethodManager mInputMethodManager;
 
     private boolean isFaceShow = false;
-    private int currentPage = 0;// 表情页数
+    private int currentPage = 0;
 
     private View root;
     private Context context;
     private BitmapFactory.Options option;
 
-    private ArrayList<String> keyList;// 表情list
+    private ArrayList<String> keyList;
 
 
 
@@ -78,6 +77,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
     public FaceContainerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context=context;
+        AppContext.getInstance().init();
         root= LayoutInflater.from(context).inflate(R.layout.layout_base_face_view,null);
         this.setOrientation(LinearLayout.VERTICAL);
         LayoutParams linearLayout= new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
@@ -216,31 +216,18 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
-            case R.id.showFace:
+        if(v.getId()==R.id.showFace){
+            if(!isFaceShow){
 
-                if(!isFaceShow){
+                boolean flag= mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0, new ResultReceiver(new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
 
-                   boolean flag= mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0, new ResultReceiver(new Handler(){
-                        @Override
-                        public void handleMessage(Message msg) {
+                    }
+                }){
+                    @Override
+                    protected void onReceiveResult(int resultCode, Bundle resultData) {
 
-                        }
-                    }){
-                        @Override
-                        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-                            try {
-                                Thread.sleep(80);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            viewPagerInfo.setVisibility(View.VISIBLE);
-                            isFaceShow=true;
-                        }
-                    });
-
-                    if(!flag){
                         try {
                             Thread.sleep(80);
                         } catch (InterruptedException e) {
@@ -249,36 +236,39 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
                         viewPagerInfo.setVisibility(View.VISIBLE);
                         isFaceShow=true;
                     }
+                });
 
-                }
-                break;
-            case R.id.send:
-
-                if(viewPagerInfo.getVisibility()==View.VISIBLE){
-                    viewPagerInfo.setVisibility(View.GONE);
-                    isFaceShow=false;
-                }else{
-                    mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                }
-
-                String text=editText.getText().toString();
-
-                onSendMessageListener.onSendMessageListener(text);
-
-                editText.setText("");
-
-                break;
-
-            case R.id.editText:
-
-                if(viewPagerInfo.getVisibility() ==View.VISIBLE){
-                    viewPagerInfo.setVisibility(View.GONE);
-                    isFaceShow=false;
+                if(!flag){
+                    try {
+                        Thread.sleep(80);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    viewPagerInfo.setVisibility(View.VISIBLE);
+                    isFaceShow=true;
                 }
 
+            }
+        }else if(v.getId()==R.id.send){
+            if(viewPagerInfo.getVisibility()==View.VISIBLE){
+                viewPagerInfo.setVisibility(View.GONE);
+                isFaceShow=false;
+            }else{
+                mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+            }
 
-                break;
+            String text=editText.getText().toString();
+
+            onSendMessageListener.onSendMessageListener(text);
+
+            editText.setText("");
+        }if(v.getId()==R.id.editText){
+            if(viewPagerInfo.getVisibility() ==View.VISIBLE){
+                viewPagerInfo.setVisibility(View.GONE);
+                isFaceShow=false;
+            }
         }
+
     }
 
     public void setOnSendMessageListener(OnSendMessageListener onSendMessageListener){

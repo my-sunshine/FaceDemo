@@ -14,8 +14,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.hqgj.facedemo.R;
-import com.hqgj.facedemo.common.AppContext;
 import com.hqgj.facedemo.utils.DensityUtil;
+import com.hqgj.mylibrary.common.AppContext;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

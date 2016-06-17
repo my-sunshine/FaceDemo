@@ -15,7 +15,7 @@
 
 
 
-    <com.hqgj.facedemo.view.FaceContainerView
+    <com.hqgj.mylibrary.view.FaceContainerView
         android:id="@+id/faceContainerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

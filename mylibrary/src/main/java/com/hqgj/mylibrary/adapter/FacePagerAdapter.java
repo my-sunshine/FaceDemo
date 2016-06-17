@@ -1,4 +1,4 @@
-package com.hqgj.facedemo.adapter;
+package com.hqgj.mylibrary.adapter;
 
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
