@@ -1,8 +1,13 @@
 package com.hqgj.facedemo.common;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 
 import com.hqgj.facedemo.R;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,32 +18,41 @@ import java.util.Map;
  */
 public class AppContext extends Application {
 
-
+    public int NUM_PAGE = 0;// 总共有多少页
+    public int NUM = 20;// 每页20个表情,还有最后一个删除button
+    private Map<String, Integer> mFaceMap = new LinkedHashMap<String, Integer>();
     private static AppContext application;
 
     public AppContext() {
-        application=this;
+        application = this;
     }
 
-    public static synchronized AppContext getInstance(){
+    public static synchronized AppContext getInstance() {
 
-        if(application==null){
-            application=new AppContext();
+        if (application == null) {
+            application = new AppContext();
         }
 
         return application;
     }
 
-    public  int NUM_PAGE = 0;// 总共有多少页
-    public  int NUM = 20;// 每页20个表情,还有最后一个删除button
-    private Map<String, Integer> mFaceMap = new LinkedHashMap<String, Integer>();
-
 
     @Override
     public void onCreate() {
         super.onCreate();
+        initImageLoader();
         initFaceMap();
-        NUM_PAGE= (int) Math.ceil(mFaceMap.size()/20.0);
+        NUM_PAGE = (int) Math.ceil(mFaceMap.size() / 20.0);
+    }
+
+    private void initImageLoader() {
+        DisplayImageOptions imageOptions = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.emoji_1)
+                .showImageOnLoading(R.drawable.emoji_1)
+                .showImageOnFail(R.drawable.emoji_1).cacheInMemory(true).cacheOnDisk(true).bitmapConfig(Bitmap.Config.RGB_565).build();
+        ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(imageOptions).
+                threadPoolSize(5).memoryCache(new WeakMemoryCache()).threadPriority(Thread.MIN_PRIORITY).build();
+        ImageLoader.getInstance().init(configuration);
+
     }
 
     public Map<String, Integer> getFaceMap() {

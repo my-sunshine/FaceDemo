@@ -85,6 +85,8 @@ public class FaceAdapter extends BaseAdapter {
             int count = AppContext.getInstance().NUM * currentPage + position;
             // 总共107个表情==
             if (faceMap!=null && count < faceMap.size()) {
+                /*String imageUri = "drawable://" + faceInCurrentPage.get(count);
+                ImageLoader.getInstance().displayImage(imageUri, viewHolder.faceIV);*/
                 viewHolder.faceIV.setImageResource(faceInCurrentPage.get(count));
                 viewHolder.faceIV.setOnClickListener(new View.OnClickListener() {
                     @Override

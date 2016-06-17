@@ -3,7 +3,6 @@ package com.hqgj.facedemo.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
@@ -31,10 +30,30 @@ public class ListViewAdapter extends BaseAdapter {
 
     private ArrayList<String> lists;
     private Context context;
+    private BitmapFactory.Options options;
 
     public ListViewAdapter(Context context, ArrayList<String> lists) {
         this.context = context;
         this.lists = lists;
+        options= new BitmapFactory.Options();
+        options.inPreferredConfig= Bitmap.Config.RGB_565;
+        options.inSampleSize=1;
+        options.inSampleSize=calculateInSampleSize(options, DensityUtil.dpToPx(context.getResources(),18), DensityUtil.dpToPx(context.getResources(),18));
+        options.inJustDecodeBounds=false;
+    }
+
+    private int calculateInSampleSize(BitmapFactory.Options options, int width, int height) {
+        options.inJustDecodeBounds=true;
+        BitmapFactory.decodeResource(context.getResources(), R.drawable.emoji_1, options);
+        int heightRatio= (int) Math.ceil((options.outHeight*1.0) / width);
+        int widthRatio= (int) Math.ceil((options.outWidth*1.0) / height);
+        int inSampleSize=1;
+        if(heightRatio>widthRatio){
+            inSampleSize=heightRatio;
+        }else{
+            inSampleSize=widthRatio;
+        }
+        return inSampleSize;
     }
 
     @Override
@@ -94,8 +113,23 @@ public class ListViewAdapter extends BaseAdapter {
             }
             int resId = AppContext.getInstance().getFaceMap().get(key);
             if (resId != 0) {
-
-                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
+                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId,options);
+                if(bitmap!=null){
+                    WeakReference<Bitmap> weakReference=new WeakReference<>(bitmap);
+                    // 通过图片资源id来得到bitmap，用一个ImageSpan来包装
+                    ImageSpan imageSpan = new ImageSpan(context,weakReference.get());
+                    // 计算该图片名字的长度，也就是要替换的字符串的长度
+                    int end = matcher.start() + key.length();
+                    // 将该图片替换字符串中规定的位置中
+                    spannableString.setSpan(imageSpan, matcher.start(), end,
+                            Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                    if (end < spannableString.length()) {
+                        // 如果整个字符串还未验证完，则继续。。
+                        dealExpression(context, spannableString, pattern, end);
+                    }
+                }
+                /*
+                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId,options);
                 if(bitmap!=null){
                     int rawHeigh = bitmap.getHeight();
                     int rawWidth = bitmap.getWidth();
@@ -118,7 +152,7 @@ public class ListViewAdapter extends BaseAdapter {
                             rawWidth, rawHeigh, matrix, true);
                     WeakReference<Bitmap> weakReference=new WeakReference<>(newBitmap);
                     // 通过图片资源id来得到bitmap，用一个ImageSpan来包装
-                    ImageSpan imageSpan = new ImageSpan(context,bitmap);
+                    ImageSpan imageSpan = new ImageSpan(context,weakReference.get());
                     // 计算该图片名字的长度，也就是要替换的字符串的长度
                     int end = matcher.start() + key.length();
                     // 将该图片替换字符串中规定的位置中
@@ -128,7 +162,9 @@ public class ListViewAdapter extends BaseAdapter {
                         // 如果整个字符串还未验证完，则继续。。
                         dealExpression(context, spannableString, pattern, end);
                     }
+                    bitmap.recycle();
                 }
+                */
                 break;
             }
         }

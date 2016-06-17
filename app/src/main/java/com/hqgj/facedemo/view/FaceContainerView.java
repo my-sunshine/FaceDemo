@@ -19,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +35,6 @@ import com.hqgj.facedemo.utils.DensityUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -57,11 +55,9 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
     private ArrayList<View> faceViews;
 
     private InputMethodManager mInputMethodManager;
-    private WindowManager.LayoutParams mParams;
 
     private boolean isFaceShow = false;
     private int currentPage = 0;// 表情页数
-    private List<String> faceKeyList;// 表情list
 
     private View root;
     private Context context;
@@ -93,9 +89,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
             if(!keySet.isEmpty()){
                 keyList.addAll(keySet);
             }
-
         }
-
     }
 
 
@@ -103,7 +97,6 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
     protected void onFinishInflate() {
         super.onFinishInflate();
         mInputMethodManager= (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-
         initView();
         initFaceView();
         option=new BitmapFactory.Options();
@@ -156,7 +149,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
         faceAdapter.setOnFaceItemClickListener(new FaceAdapter.OnFaceItemClickListener() {
             @Override
             public void onFaceItemClickListener(int position) {
-                Toast.makeText(context, "position:" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "position:" + position, Toast.LENGTH_SHORT).show();
                 int count = currentPage * AppContext.getInstance().NUM + position;
                 Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), (Integer) AppContext.getInstance().getFaceMap().values().toArray()[count], option);
                 if (bitmap != null) {
@@ -179,7 +172,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
 
             @Override
             public void onFaceItemDeleteClickListener(int position) {
-                Toast.makeText(context, "position:" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "position:" + position, Toast.LENGTH_SHORT).show();
                 if (position == AppContext.getInstance().NUM) {
                     int selection = editText.getSelectionStart();
                     String text = editText.getText().toString();
