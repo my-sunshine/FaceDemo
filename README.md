@@ -8,3 +8,31 @@
  
  
 ![](https://github.com/my-sunshine/FaceDemo/raw/master/app/img/demo1.jpg)  
+
+使用：
+
+
+
+compile 'com.hqgj:mylibrary:0.2.3'
+
+
+
+    <com.hqgj.mylibrary.view.FaceContainerView
+        android:id="@+id/faceContainerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+
+
+faceContainerView.setOnSendMessageListener(new FaceContainerView.OnSendMessageListener() {
+            @Override
+            public void onSendMessageListener(String message) {
+                Toast.makeText(MainActivity.this, "text:" + message, Toast.LENGTH_LONG).show();
+
+                lists.add(message);
+
+                adapter.notifyDataSetInvalidated();
+
+            }
+        });
