@@ -6,6 +6,17 @@
     android:orientation="vertical">
 
 
+    <Button
+        android:id="@+id/btn"
+        android:text="show keyBoard"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+
+    <Button
+        android:id="@+id/btnHidden"
+        android:text="hidden keyBoard"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
