@@ -11,18 +11,17 @@
 
 ####3、使用
 
+######1、
+compile 'com.hqgj:mylibrary:0.2.3'
 
-
-#####1、compile 'com.hqgj:mylibrary:0.2.3'
-
-#####2、
+######2、
     <com.hqgj.mylibrary.view.FaceContainerView
         android:id="@+id/faceContainerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
 
-#####3、
+######3、
 faceContainerView.setOnSendMessageListener(
 
 	new FaceContainerView.OnSendMessageListener() 
