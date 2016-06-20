@@ -8,27 +8,21 @@
 ####2、如何使用Android Studio把自己的Android library分享到jCenter和Maven Central
  
  http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0623/3097.html
- 
- 
- 
-![](https://github.com/my-sunshine/FaceDemo/raw/master/app/img/demo1.jpg)  
 
-使用：
+####3、使用
 
 
 
-compile 'com.hqgj:mylibrary:0.2.3'
+#####1、compile 'com.hqgj:mylibrary:0.2.3'
 
-
-
+#####2、
     <com.hqgj.mylibrary.view.FaceContainerView
         android:id="@+id/faceContainerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
 
-
-
+#####3、
 faceContainerView.setOnSendMessageListener(
 
 	new FaceContainerView.OnSendMessageListener() 
@@ -48,3 +42,5 @@ faceContainerView.setOnSendMessageListener(
         }
 
      );
+
+![](https://github.com/my-sunshine/FaceDemo/raw/master/app/img/demo1.jpg)  
