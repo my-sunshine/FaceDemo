@@ -25,9 +25,14 @@ compile 'com.hqgj:mylibrary:0.2.3'
 
 
 
-faceContainerView.setOnSendMessageListener(new FaceContainerView.OnSendMessageListener() {
+faceContainerView.setOnSendMessageListener(
+
+	new FaceContainerView.OnSendMessageListener() 
+
+	{
             @Override
             public void onSendMessageListener(String message) {
+
                 Toast.makeText(MainActivity.this, "text:" + message, Toast.LENGTH_LONG).show();
 
                 lists.add(message);
@@ -35,4 +40,7 @@ faceContainerView.setOnSendMessageListener(new FaceContainerView.OnSendMessageLi
                 adapter.notifyDataSetInvalidated();
 
             }
-        });
+
+        }
+
+     );
