@@ -3,10 +3,10 @@ package com.hqgj.facedemo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hqgj.facedemo.adapter.ListViewAdapter;
+import com.hqgj.facedemo.view.ExtendListView;
 import com.hqgj.mylibrary.view.FaceContainerView;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private FaceContainerView faceContainerView;
-    private ListView listView;
+    private ExtendListView listView;
     private ListViewAdapter adapter;
     private ArrayList<String> lists;
     @Override
@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         lists=new ArrayList<>(2);
         lists.add("111");
         lists.add("222");
+        lists.add("[街舞]");lists.add("[回头]");lists.add("222");
         initView();
     }
 
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         faceContainerView.setOnSendMessageListener(new FaceContainerView.OnSendMessageListener() {
             @Override
             public void onSendMessageListener(String message) {
-                Toast.makeText(MainActivity.this, "text:" + message, Toast.LENGTH_LONG).show();
 
                 lists.add(message);
 
@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        faceContainerView.setTakePhotoShow(true);
 
         faceContainerView.setOnTakePhotoListener(new FaceContainerView.OnTakePhotoListener() {
             @Override
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        listView= (ListView) findViewById(R.id.listView);
+        listView= (ExtendListView) findViewById(R.id.listView);
         adapter=new ListViewAdapter(this,lists);
         listView.setAdapter(adapter);
 

@@ -1,36 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical">
 
 
-    <Button
-        android:id="@+id/btn"
-        android:text="show keyBoard"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
+            <Button
+                android:id="@+id/btn"
+                android:text="show keyBoard"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
 
-    <Button
-        android:id="@+id/btnHidden"
-        android:text="hidden keyBoard"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+            <Button
+                android:id="@+id/btnHidden"
+                android:text="hidden keyBoard"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
+
+            <com.hqgj.facedemo.view.ExtendListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
 
 
+    </ScrollView>
 
 
     <com.hqgj.mylibrary.view.FaceContainerView
         android:id="@+id/faceContainerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="bottom"
         />
-
 </LinearLayout>
-
