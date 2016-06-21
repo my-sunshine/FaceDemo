@@ -22,9 +22,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         lists=new ArrayList<>(2);
+        lists.add("[test]");
         lists.add("111");
         lists.add("222");
         lists.add("[街舞]");lists.add("[回头]");lists.add("222");
+
         initView();
     }
 
