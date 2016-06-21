@@ -1,29 +1,42 @@
 package com.hqgj.mylibrary.common;
 
-import com.hqgj.mylibrary.R;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
+import android.util.Log;
 
+import com.hqgj.mylibrary.R;
+import com.hqgj.mylibrary.utils.DensityUtil;
+
+import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * author: ly
  * data: 2016/6/15
  */
-public class AppContext  {
+public class AppUtil {
 
     public int NUM_PAGE = 0;
     public int NUM = 20;
     private Map<String, Integer> mFaceMap = new LinkedHashMap<String, Integer>();
-    private static AppContext application;
+    private static AppUtil application;
+    private BitmapFactory.Options options;
 
-    public AppContext() {
+    public AppUtil() {
         application = this;
     }
 
-    public static synchronized AppContext getInstance() {
+    public static synchronized AppUtil getInstance() {
 
         if (application == null) {
-            application = new AppContext();
+            application = new AppUtil();
         }
         return application;
     }
@@ -38,7 +51,9 @@ public class AppContext  {
     public void init(){
         initFaceMap();
         NUM_PAGE = (int) Math.ceil(mFaceMap.size() / 20.0);
+
     }
+
     private void initFaceMap() {
         mFaceMap.put("[呲牙]", R.drawable.emoji_1);
         mFaceMap.put("[调皮]", R.drawable.emoji_2);
@@ -152,6 +167,80 @@ public class AppContext  {
 
         mFaceMap.put("[右太极]", R.drawable.emoji_106);
         mFaceMap.put("[闭嘴]", R.drawable.emoji_107);
+    }
+
+
+
+    public void  initBitmapOption(Context context){
+        if(options==null){
+            options= new BitmapFactory.Options();
+            options.inPreferredConfig= Bitmap.Config.RGB_565;
+            options.inSampleSize=1;
+            options.inSampleSize=calculateInSampleSize(context,options, DensityUtil.dpToPx(context.getResources(), 18), DensityUtil.dpToPx(context.getResources(),18));
+            options.inJustDecodeBounds=false;
+        }
+    }
+
+
+    private int calculateInSampleSize(Context context,BitmapFactory.Options options, int width, int height) {
+        options.inJustDecodeBounds=true;
+        BitmapFactory.decodeResource(context.getResources(), R.drawable.emoji_1, options);
+        int heightRatio= (int) Math.ceil((options.outHeight*1.0) / width);
+        int widthRatio= (int) Math.ceil((options.outWidth*1.0) / height);
+        int inSampleSize=1;
+        if(heightRatio>widthRatio){
+            inSampleSize=heightRatio;
+        }else{
+            inSampleSize=widthRatio;
+        }
+        return inSampleSize;
+    }
+
+    public SpannableString getSpannableString(Context context,String str){
+        initBitmapOption(context);
+        SpannableString spannableString=new SpannableString(str);
+        // 正则表达式比配字符串里是否含有表情，如： 我好[开心]啊
+        String zhengze = "\\[[^\\]]+\\]";
+        // 通过传入的正则表达式来生成一个pattern
+        Pattern pattern = Pattern.compile(zhengze, Pattern.CASE_INSENSITIVE);
+        try {
+            dealExpression(context, spannableString, pattern, 0);
+        } catch (Exception e) {
+            Log.e("dealExpression", e.getMessage());
+        }
+        return spannableString;
+    }
+
+    private void dealExpression(Context context, SpannableString spannableString, Pattern pattern, int start) {
+        Matcher matcher = pattern.matcher(spannableString);
+        while (matcher.find()) {
+            String key = matcher.group();
+            // 返回第一个字符的索引的文本匹配整个正则表达式,ture 则继续递归
+            if (matcher.start() < start) {
+                continue;
+            }
+            if(AppUtil.getInstance().getFaceMap().containsKey(key)){
+                int resId = AppUtil.getInstance().getFaceMap().get(key);
+                if (resId != 0) {
+                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId, options);
+                    if(bitmap!=null){
+                        WeakReference<Bitmap> weakReference=new WeakReference<>(bitmap);
+                        // 通过图片资源id来得到bitmap，用一个ImageSpan来包装
+                        ImageSpan imageSpan = new ImageSpan(context,weakReference.get());
+                        // 计算该图片名字的长度，也就是要替换的字符串的长度
+                        int end = matcher.start() + key.length();
+                        // 将该图片替换字符串中规定的位置中
+                        spannableString.setSpan(imageSpan, matcher.start(), end,
+                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                        if (end < spannableString.length()) {
+                            // 如果整个字符串还未验证完，则继续。。
+                            dealExpression(context, spannableString, pattern, end);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
     }
 
 

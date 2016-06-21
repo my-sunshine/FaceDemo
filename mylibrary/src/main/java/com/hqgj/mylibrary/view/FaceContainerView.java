@@ -10,8 +10,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ResultReceiver;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -25,12 +27,12 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.hqgj.mylibrary.R;
 import com.hqgj.mylibrary.adapter.FaceAdapter;
 import com.hqgj.mylibrary.adapter.FacePagerAdapter;
-import com.hqgj.mylibrary.common.AppContext;
+import com.hqgj.mylibrary.common.AppUtil;
 import com.hqgj.mylibrary.utils.DensityUtil;
 import com.hqgj.mylibrary.view.indicator.CirclePageIndicator;
 
@@ -50,12 +52,19 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
     private LinearLayout viewPagerInfo ;
     private Button send;
     private EditText editText;
+    private ImageView addPhoto;
+    private LinearLayout photoInfo;
+    private TextView takeCamera;
+    private TextView takePhoto;
+
 
     private ArrayList<View> faceViews;
 
     private InputMethodManager mInputMethodManager;
 
     private boolean isFaceShow = false;
+
+    private boolean isTakePhotoShow = false;
     private int currentPage = 0;
 
     private View root;
@@ -77,15 +86,15 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
     public FaceContainerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context=context;
-        AppContext.getInstance().init();
+        AppUtil.getInstance().init();
         root= LayoutInflater.from(context).inflate(R.layout.layout_base_face_view,null);
         this.setOrientation(LinearLayout.VERTICAL);
         LayoutParams linearLayout= new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
         this.removeAllViews();
         this.addView(root, linearLayout);
         keyList=new ArrayList<>();
-        if(AppContext.getInstance().getFaceMap()!=null){
-            Set<String > keySet=AppContext.getInstance().getFaceMap().keySet();
+        if(AppUtil.getInstance().getFaceMap()!=null){
+            Set<String > keySet= AppUtil.getInstance().getFaceMap().keySet();
             if(!keySet.isEmpty()){
                 keyList.addAll(keySet);
             }
@@ -107,7 +116,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
 
     private void initFaceView() {
         faceViews=new ArrayList<>();
-        for(int index=0;index< AppContext.getInstance().NUM_PAGE;index++){
+        for(int index=0;index< AppUtil.getInstance().NUM_PAGE;index++){
             faceViews.add(getGridView(index));
         }
         FacePagerAdapter facePagerAdapter =new FacePagerAdapter(faceViews);
@@ -121,7 +130,6 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
 
             @Override
             public void onPageSelected(int position) {
-                Toast.makeText(context, "page:" + position, Toast.LENGTH_LONG).show();
                 currentPage = position;
             }
 
@@ -138,10 +146,11 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         gridView.setBackgroundColor(Color.TRANSPARENT);
         gridView.setHorizontalSpacing(DensityUtil.dpToPx(context.getResources(), 1));
-        gridView.setVerticalSpacing(DensityUtil.dpToPx(context.getResources(), 1));
+        gridView.setVerticalSpacing(DensityUtil.dpToPx(context.getResources(), 12));
         gridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
         gridView.setCacheColorHint(0);
         gridView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        gridView.setPadding(0,DensityUtil.dpToPx(context.getResources(), 12),0,0);
         gridView.setGravity(Gravity.CENTER);
         FaceAdapter faceAdapter=new FaceAdapter(context, page);
         gridView.setAdapter(faceAdapter);
@@ -149,9 +158,8 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
         faceAdapter.setOnFaceItemClickListener(new FaceAdapter.OnFaceItemClickListener() {
             @Override
             public void onFaceItemClickListener(int position) {
-                //Toast.makeText(context, "position:" + position, Toast.LENGTH_SHORT).show();
-                int count = currentPage * AppContext.getInstance().NUM + position;
-                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), (Integer) AppContext.getInstance().getFaceMap().values().toArray()[count], option);
+                int count = currentPage * AppUtil.getInstance().NUM + position;
+                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), (Integer) AppUtil.getInstance().getFaceMap().values().toArray()[count], option);
                 if (bitmap != null) {
                     String emojiStr = keyList.get(count);
                     WeakReference<Bitmap> weakReference = new WeakReference<>(bitmap);
@@ -172,8 +180,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
 
             @Override
             public void onFaceItemDeleteClickListener(int position) {
-                //Toast.makeText(context, "position:" + position, Toast.LENGTH_SHORT).show();
-                if (position == AppContext.getInstance().NUM) {
+                if (position == AppUtil.getInstance().NUM) {
                     int selection = editText.getSelectionStart();
                     String text = editText.getText().toString();
                     if (selection > 0) {
@@ -200,6 +207,10 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
     }
 
     private void initView() {
+        takePhoto= (TextView) root.findViewById(R.id.takePhoto);
+        takeCamera= (TextView) root.findViewById(R.id.takeCamera);
+        photoInfo= (LinearLayout) root.findViewById(R.id.photoInfo);
+        addPhoto= (ImageView) root.findViewById(R.id.addPhoto);
         showFace= (ImageView) root.findViewById(R.id.showFace);
         editText= (EditText) root.findViewById(R.id.editText);
         send= (Button) root.findViewById(R.id.send);
@@ -211,12 +222,79 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
         send.setOnClickListener(this);
         showFace.setOnClickListener(this);
         editText.setOnClickListener(this);
+        addPhoto.setOnClickListener(this);
+
+        takePhoto.setOnClickListener(this);
+        takeCamera.setOnClickListener(this);
+
+        editText.requestFocus();
+
+        if(!isTakePhotoShow){
+            addPhoto.setVisibility(View.GONE);
+            send.setVisibility(View.VISIBLE);
+        }
+
+        editText.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    if (isFaceShow) {
+                        return;
+                    }
+                    if (viewPagerInfo.getVisibility() == View.VISIBLE) {
+                        viewPagerInfo.setVisibility(View.GONE);
+                        isFaceShow = false;
+                    }
+                    if (View.VISIBLE == photoInfo.getVisibility()) {
+                        photoInfo.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!isTakePhotoShow) {
+                    return;
+                }
+                if (s.length() > 0) {
+
+                    addPhoto.setVisibility(View.GONE);
+
+                    send.setVisibility(View.VISIBLE);
+
+                } else {
+
+                    addPhoto.setVisibility(View.VISIBLE);
+
+                    send.setVisibility(View.GONE);
+
+                }
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
 
         if(v.getId()==R.id.showFace){
+            if(View.VISIBLE==photoInfo.getVisibility()){
+                photoInfo.setVisibility(View.GONE);
+            }
             if(!isFaceShow){
 
                 boolean flag= mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0, new ResultReceiver(new Handler(){
@@ -246,6 +324,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
                     }
                     viewPagerInfo.setVisibility(View.VISIBLE);
                     isFaceShow=true;
+                    editText.requestFocus();
                 }
 
             }
@@ -262,11 +341,101 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
             onSendMessageListener.onSendMessageListener(text);
 
             editText.setText("");
-        }if(v.getId()==R.id.editText){
+        }else if(v.getId()==R.id.editText){
             if(viewPagerInfo.getVisibility() ==View.VISIBLE){
                 viewPagerInfo.setVisibility(View.GONE);
                 isFaceShow=false;
             }
+            if(View.VISIBLE==photoInfo.getVisibility()){
+                photoInfo.setVisibility(View.GONE);
+            }
+        }
+
+
+        else if(v.getId()==R.id.addPhoto){
+
+            if(!isTakePhotoShow){
+                return;
+            }
+
+            editText.clearFocus();
+
+            if(viewPagerInfo.getVisibility()==View.VISIBLE){
+                viewPagerInfo.setVisibility(View.GONE);
+                isFaceShow=false;
+            }
+
+            if(View.VISIBLE==photoInfo.getVisibility()){
+                photoInfo.setVisibility(View.GONE);
+
+            }else{
+                boolean flag= mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0, new ResultReceiver(new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+
+                    }
+                }){
+                    @Override
+                    protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+                        try {
+                            Thread.sleep(80);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        photoInfo.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                if(!flag){
+                    photoInfo.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+        }else if(v.getId()==R.id.takePhoto){
+            if (View.VISIBLE == photoInfo.getVisibility()) {
+                photoInfo.setVisibility(View.GONE);
+            }
+            onTakePhotoListener.onTakePhotoListener();
+        }else if(v.getId()==R.id.takeCamera){
+            if (View.VISIBLE == photoInfo.getVisibility()) {
+                photoInfo.setVisibility(View.GONE);
+            }
+            onTakePhotoListener.onTakeCameraListener();
+        }
+
+    }
+
+
+    public void showKeyBoard(){
+        if(viewPagerInfo.getVisibility()==View.VISIBLE){
+            viewPagerInfo.setVisibility(View.GONE);
+            isFaceShow=false;
+        }
+        editText.requestFocus();
+        mInputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+    }
+
+
+    public void hiddenKeyBoard(){
+        if(viewPagerInfo.getVisibility()==View.VISIBLE){
+            viewPagerInfo.setVisibility(View.GONE);
+            isFaceShow=false;
+        }else{
+            mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        }
+    }
+
+
+    public void setTakePhotoShow(boolean isTakePhotoShow){
+        this.isTakePhotoShow=isTakePhotoShow;
+        if(isTakePhotoShow){
+            addPhoto.setVisibility(View.VISIBLE);
+            send.setVisibility(View.GONE);
+        }else{
+            addPhoto.setVisibility(View.GONE);
+            send.setVisibility(View.VISIBLE);
         }
 
     }
@@ -275,7 +444,22 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
         this.onSendMessageListener=onSendMessageListener;
     }
     private OnSendMessageListener onSendMessageListener;
+
     public interface OnSendMessageListener{
         void onSendMessageListener(String message);
     }
+
+
+    public void setOnTakePhotoListener(OnTakePhotoListener onTakePhotoListener){
+        this.onTakePhotoListener=onTakePhotoListener;
+    }
+
+    private OnTakePhotoListener onTakePhotoListener;
+
+    public interface OnTakePhotoListener{
+        void onTakePhotoListener();
+        void onTakeCameraListener();
+    }
+
+
 }

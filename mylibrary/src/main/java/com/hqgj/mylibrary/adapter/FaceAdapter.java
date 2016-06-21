@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.hqgj.mylibrary.R;
-import com.hqgj.mylibrary.common.AppContext;
+import com.hqgj.mylibrary.common.AppUtil;
 import com.hqgj.mylibrary.utils.DensityUtil;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class FaceAdapter extends BaseAdapter {
         this.context=context;
         this.currentPage=currentPage;
         inflate=LayoutInflater.from(context);
-        faceMap= AppContext.getInstance().getFaceMap();
+        faceMap= AppUtil.getInstance().getFaceMap();
         initDate();
     }
 
@@ -45,7 +45,7 @@ public class FaceAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return AppContext.getInstance().NUM + 1;
+        return AppUtil.getInstance().NUM + 1;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class FaceAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        if (position == AppContext.getInstance().NUM) {
+        if (position == AppUtil.getInstance().NUM) {
             viewHolder.faceIV.setImageResource(R.drawable.emotion_del_selector);
             viewHolder.faceIV.setBackgroundDrawable(null);
             viewHolder.faceIV.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +82,7 @@ public class FaceAdapter extends BaseAdapter {
                 }
             });
         } else {
-            int count = AppContext.getInstance().NUM * currentPage + position;
+            int count = AppUtil.getInstance().NUM * currentPage + position;
             if (faceMap!=null && count < faceMap.size()) {
                 /*String imageUri = "drawable://" + faceInCurrentPage.get(count);
                 ImageLoader.getInstance().displayImage(imageUri, viewHolder.faceIV);*/
