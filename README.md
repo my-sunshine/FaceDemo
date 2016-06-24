@@ -12,7 +12,7 @@
 ####3、使用
 
 ######1、
-compile 'com.hqgj:mylibrary:0.2.3'
+compile 'com.hqgj:mylibrary:0.3.0'
 
 ######2、
     <com.hqgj.mylibrary.view.FaceContainerView
