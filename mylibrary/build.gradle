@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/my-sunshine/FaceDemo'
     gitUrl = 'https://github.com/my-sunshine/FaceDemo.git'
 
-    libraryVersion = '0.2.5'
+    libraryVersion = '0.3.0'
 
     developerId = 'hongji'
     developerName = 'LI YI'

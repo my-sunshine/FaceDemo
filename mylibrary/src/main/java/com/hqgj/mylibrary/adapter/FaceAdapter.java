@@ -26,14 +26,22 @@ public class FaceAdapter extends BaseAdapter {
     private Map<String, Integer> faceMap ;
     private LayoutInflater inflate;
     private ArrayList<Integer> faceInCurrentPage=new ArrayList<>();
+    private boolean showHX ;
 
-    public FaceAdapter(Context context, int currentPage) {
+    public FaceAdapter(Context context, int currentPage,boolean showHX) {
         this.context=context;
         this.currentPage=currentPage;
         inflate=LayoutInflater.from(context);
-        faceMap= AppUtil.getInstance().getFaceMap();
-        initDate();
+        if(showHX){
+            faceMap= AppUtil.getInstance().getFaceMapHX();
+            initDate();
+        }else{
+            faceMap= AppUtil.getInstance().getFaceMap();
+            initDate();
+        }
+
     }
+
 
     private void initDate() {
         if(faceMap!=null){

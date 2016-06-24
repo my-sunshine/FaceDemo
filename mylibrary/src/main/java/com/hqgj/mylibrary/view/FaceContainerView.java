@@ -1,6 +1,7 @@
 package com.hqgj.mylibrary.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -27,7 +28,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.hqgj.mylibrary.R;
 import com.hqgj.mylibrary.adapter.FaceAdapter;
@@ -54,8 +54,8 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
     private EditText editText;
     private ImageView addPhoto;
     private LinearLayout photoInfo;
-    private TextView takeCamera;
-    private TextView takePhoto;
+    private LinearLayout takeCamera;
+    private LinearLayout takePhoto;
 
 
     private ArrayList<View> faceViews;
@@ -73,6 +73,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
 
     private ArrayList<String> keyList;
 
+    private boolean showHX;
 
 
     public FaceContainerView(Context context) {
@@ -85,6 +86,14 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
 
     public FaceContainerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        TypedArray typedArray=context.obtainStyledAttributes(attrs,R.styleable.showHXStyle,defStyleAttr,0);
+
+        showHX=typedArray.getBoolean(R.styleable.showHXStyle_showHX,false);
+
+        typedArray.recycle();
+
+
         this.context=context;
         AppUtil.getInstance().init();
         root= LayoutInflater.from(context).inflate(R.layout.layout_base_face_view,null);
@@ -93,12 +102,23 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
         this.removeAllViews();
         this.addView(root, linearLayout);
         keyList=new ArrayList<>();
-        if(AppUtil.getInstance().getFaceMap()!=null){
-            Set<String > keySet= AppUtil.getInstance().getFaceMap().keySet();
-            if(!keySet.isEmpty()){
-                keyList.addAll(keySet);
+
+        if(showHX){
+            if(AppUtil.getInstance().getFaceMapHX()!=null){
+                Set<String > keySet= AppUtil.getInstance().getFaceMapHX().keySet();
+                if(!keySet.isEmpty()){
+                    keyList.addAll(keySet);
+                }
+            }
+        }else{
+            if(AppUtil.getInstance().getFaceMap()!=null){
+                Set<String > keySet= AppUtil.getInstance().getFaceMap().keySet();
+                if(!keySet.isEmpty()){
+                    keyList.addAll(keySet);
+                }
             }
         }
+
     }
 
 
@@ -152,14 +172,19 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
         gridView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         gridView.setPadding(0,DensityUtil.dpToPx(context.getResources(), 12),0,0);
         gridView.setGravity(Gravity.CENTER);
-        FaceAdapter faceAdapter=new FaceAdapter(context, page);
+        FaceAdapter faceAdapter=new FaceAdapter(context, page,showHX);
         gridView.setAdapter(faceAdapter);
 
         faceAdapter.setOnFaceItemClickListener(new FaceAdapter.OnFaceItemClickListener() {
             @Override
             public void onFaceItemClickListener(int position) {
                 int count = currentPage * AppUtil.getInstance().NUM + position;
-                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), (Integer) AppUtil.getInstance().getFaceMap().values().toArray()[count], option);
+                Bitmap bitmap;
+                if(showHX){
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), (Integer) AppUtil.getInstance().getFaceMapHX().values().toArray()[count], option);
+                }else {
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), (Integer) AppUtil.getInstance().getFaceMap().values().toArray()[count], option);
+                }
                 if (bitmap != null) {
                     String emojiStr = keyList.get(count);
                     WeakReference<Bitmap> weakReference = new WeakReference<>(bitmap);
@@ -207,8 +232,8 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
     }
 
     private void initView() {
-        takePhoto= (TextView) root.findViewById(R.id.takePhoto);
-        takeCamera= (TextView) root.findViewById(R.id.takeCamera);
+        takePhoto= (LinearLayout) root.findViewById(R.id.takePhoto);
+        takeCamera= (LinearLayout) root.findViewById(R.id.takeCamera);
         photoInfo= (LinearLayout) root.findViewById(R.id.photoInfo);
         addPhoto= (ImageView) root.findViewById(R.id.addPhoto);
         showFace= (ImageView) root.findViewById(R.id.showFace);
@@ -239,10 +264,12 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     if (isFaceShow) {
+                        showFace.setImageResource(R.drawable.chat_bottombar_icon_face);
                         return;
                     }
                     if (viewPagerInfo.getVisibility() == View.VISIBLE) {
                         viewPagerInfo.setVisibility(View.GONE);
+                        showFace.setImageResource(R.drawable.chat_bottombar_icon_face_pressed);
                         isFaceShow = false;
                     }
                     if (View.VISIBLE == photoInfo.getVisibility()) {
@@ -312,6 +339,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
                             e.printStackTrace();
                         }
                         viewPagerInfo.setVisibility(View.VISIBLE);
+                        showFace.setImageResource(R.drawable.chat_bottombar_icon_face);
                         isFaceShow=true;
                     }
                 });
@@ -324,6 +352,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
                     }
                     viewPagerInfo.setVisibility(View.VISIBLE);
                     isFaceShow=true;
+                    showFace.setImageResource(R.drawable.chat_bottombar_icon_face);
                     editText.requestFocus();
                 }
 
@@ -332,6 +361,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
             if(viewPagerInfo.getVisibility()==View.VISIBLE){
                 viewPagerInfo.setVisibility(View.GONE);
                 isFaceShow=false;
+                showFace.setImageResource(R.drawable.chat_bottombar_icon_face_pressed);
             }else{
                 mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
             }
@@ -345,6 +375,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
             if(viewPagerInfo.getVisibility() ==View.VISIBLE){
                 viewPagerInfo.setVisibility(View.GONE);
                 isFaceShow=false;
+                showFace.setImageResource(R.drawable.chat_bottombar_icon_face_pressed);
             }
             if(View.VISIBLE==photoInfo.getVisibility()){
                 photoInfo.setVisibility(View.GONE);
@@ -363,6 +394,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
             if(viewPagerInfo.getVisibility()==View.VISIBLE){
                 viewPagerInfo.setVisibility(View.GONE);
                 isFaceShow=false;
+                showFace.setImageResource(R.drawable.chat_bottombar_icon_face_pressed);
             }
 
             if(View.VISIBLE==photoInfo.getVisibility()){
@@ -412,6 +444,7 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
         if(viewPagerInfo.getVisibility()==View.VISIBLE){
             viewPagerInfo.setVisibility(View.GONE);
             isFaceShow=false;
+            showFace.setImageResource(R.drawable.chat_bottombar_icon_face_pressed);
         }
         editText.requestFocus();
         mInputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
@@ -422,8 +455,12 @@ public class FaceContainerView extends LinearLayout implements View.OnClickListe
         if(viewPagerInfo.getVisibility()==View.VISIBLE){
             viewPagerInfo.setVisibility(View.GONE);
             isFaceShow=false;
+            showFace.setImageResource(R.drawable.chat_bottombar_icon_face_pressed);
         }else{
             mInputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        }
+        if (View.VISIBLE == photoInfo.getVisibility()) {
+            photoInfo.setVisibility(View.GONE);
         }
     }
 

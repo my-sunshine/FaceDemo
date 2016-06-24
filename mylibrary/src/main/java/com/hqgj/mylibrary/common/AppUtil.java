@@ -26,6 +26,9 @@ public class AppUtil {
     public int NUM_PAGE = 0;
     public int NUM = 20;
     private Map<String, Integer> mFaceMap = new LinkedHashMap<String, Integer>();
+    private Map<String, Integer> mFaceMapHX = new LinkedHashMap<String, Integer>();
+
+
     private static AppUtil application;
     private BitmapFactory.Options options;
 
@@ -54,6 +57,59 @@ public class AppUtil {
 
     }
 
+
+    public Map<String, Integer> getFaceMapHX() {
+        if (!mFaceMapHX.isEmpty())
+            return mFaceMapHX;
+        initHX();
+        return mFaceMapHX;
+    }
+
+    public void initHX(){
+        initFaceMapHX();
+        NUM_PAGE = (int) Math.ceil(mFaceMapHX.size() / 20.0);
+
+    }
+
+    private void initFaceMapHX() {
+        mFaceMapHX.put("[):]", R.drawable.hx_1);
+        mFaceMapHX.put("[:D]", R.drawable.hx_2);
+        mFaceMapHX.put("[;)]", R.drawable.hx_3);
+        mFaceMapHX.put("[:-o]", R.drawable.hx_4);
+        mFaceMapHX.put("[:p]", R.drawable.hx_5);
+        mFaceMapHX.put("[(H)]", R.drawable.hx_6);
+        mFaceMapHX.put("[:@]", R.drawable.hx_7);
+        mFaceMapHX.put("[:s]", R.drawable.hx_8);
+        mFaceMapHX.put("[:$]", R.drawable.hx_9);
+        mFaceMapHX.put("[:(]", R.drawable.hx_10);
+        mFaceMapHX.put("[:'(]", R.drawable.hx_11);
+        mFaceMapHX.put("[:|]", R.drawable.hx_12);
+        mFaceMapHX.put("[(a)]", R.drawable.hx_13);
+        mFaceMapHX.put("[8o|]", R.drawable.hx_14);
+        mFaceMapHX.put("[8-|]", R.drawable.hx_15);
+        mFaceMapHX.put("[+o(]", R.drawable.hx_16);
+        mFaceMapHX.put("[<o)]", R.drawable.hx_17);
+        mFaceMapHX.put("[|-)]", R.drawable.hx_18);
+        mFaceMapHX.put("[*-)]", R.drawable.hx_19);
+        mFaceMapHX.put("[:-#]", R.drawable.hx_20);
+        mFaceMapHX.put("[:-*]", R.drawable.hx_21);
+        mFaceMapHX.put("[^o)]", R.drawable.hx_22);
+        mFaceMapHX.put("[8-)]", R.drawable.hx_23);
+        mFaceMapHX.put("[(|)]", R.drawable.hx_24);
+        mFaceMapHX.put("[(u)]", R.drawable.hx_25);
+        mFaceMapHX.put("[(S)]", R.drawable.hx_26);
+        mFaceMapHX.put("[(*)]", R.drawable.hx_27);
+        mFaceMapHX.put("[(#)]", R.drawable.hx_28);
+        mFaceMapHX.put("[(R)]", R.drawable.hx_29);
+        mFaceMapHX.put("[({)]", R.drawable.hx_30);
+        mFaceMapHX.put("[(})]", R.drawable.hx_31);
+        mFaceMapHX.put("[(k)]", R.drawable.hx_32);
+        mFaceMapHX.put("[(F)]", R.drawable.hx_33);
+        mFaceMapHX.put("[(W)]", R.drawable.hx_34);
+        mFaceMapHX.put("[(D)]", R.drawable.hx_35);
+    }
+
+
     private void initFaceMap() {
         mFaceMap.put("[呲牙]", R.drawable.emoji_1);
         mFaceMap.put("[调皮]", R.drawable.emoji_2);
@@ -76,7 +132,6 @@ public class AppUtil {
         mFaceMap.put("[可爱]", R.drawable.emoji_19);
         mFaceMap.put("[色]", R.drawable.emoji_20);
         mFaceMap.put("[害羞]", R.drawable.emoji_21);
-
         mFaceMap.put("[得意]", R.drawable.emoji_22);
         mFaceMap.put("[吐]", R.drawable.emoji_23);
         mFaceMap.put("[微笑]", R.drawable.emoji_24);
@@ -98,7 +153,6 @@ public class AppUtil {
         mFaceMap.put("[衰]", R.drawable.emoji_40);
         mFaceMap.put("[撇嘴]", R.drawable.emoji_41);
         mFaceMap.put("[阴险]", R.drawable.emoji_42);
-
         mFaceMap.put("[奋斗]", R.drawable.emoji_43);
         mFaceMap.put("[发呆]", R.drawable.emoji_44);
         mFaceMap.put("[右哼哼]", R.drawable.emoji_45);
@@ -120,7 +174,6 @@ public class AppUtil {
         mFaceMap.put("[西瓜]", R.drawable.emoji_61);
         mFaceMap.put("[啤酒]", R.drawable.emoji_62);
         mFaceMap.put("[飘虫]", R.drawable.emoji_63);
-
         mFaceMap.put("[勾引]", R.drawable.emoji_64);
         mFaceMap.put("[OK]", R.drawable.emoji_65);
         mFaceMap.put("[爱你]", R.drawable.emoji_66);
@@ -142,7 +195,6 @@ public class AppUtil {
         mFaceMap.put("[饥饿]", R.drawable.emoji_82);
         mFaceMap.put("[困]", R.drawable.emoji_83);
         mFaceMap.put("[咒骂]", R.drawable.emoji_84);
-
         mFaceMap.put("[折磨]", R.drawable.emoji_85);
         mFaceMap.put("[抠鼻]", R.drawable.emoji_86);
         mFaceMap.put("[鼓掌]", R.drawable.emoji_87);
@@ -164,9 +216,10 @@ public class AppUtil {
         mFaceMap.put("[街舞]", R.drawable.emoji_103);
         mFaceMap.put("[献吻]", R.drawable.emoji_104);
         mFaceMap.put("[左太极]", R.drawable.emoji_105);
-
         mFaceMap.put("[右太极]", R.drawable.emoji_106);
         mFaceMap.put("[闭嘴]", R.drawable.emoji_107);
+
+
     }
 
 
@@ -204,14 +257,31 @@ public class AppUtil {
         // 通过传入的正则表达式来生成一个pattern
         Pattern pattern = Pattern.compile(zhengze, Pattern.CASE_INSENSITIVE);
         try {
-            dealExpression(context, spannableString, pattern, 0);
+            dealExpression(context, spannableString, pattern, 0,false);
         } catch (Exception e) {
             Log.e("dealExpression", e.getMessage());
         }
         return spannableString;
     }
 
-    private void dealExpression(Context context, SpannableString spannableString, Pattern pattern, int start) {
+    public SpannableString getSpannableStringHX(Context context,String str,boolean showHX){
+        initBitmapOption(context);
+        SpannableString spannableString=new SpannableString(str);
+        // 正则表达式比配字符串里是否含有表情，如： 我好[开心]啊
+        String zhengze = "\\[[^\\]]+\\]";
+        // 通过传入的正则表达式来生成一个pattern
+        Pattern pattern = Pattern.compile(zhengze, Pattern.CASE_INSENSITIVE);
+        try {
+            dealExpression(context, spannableString, pattern, 0,showHX);
+        } catch (Exception e) {
+            Log.e("dealExpression", e.getMessage());
+        }
+        return spannableString;
+    }
+
+
+
+    private void dealExpression(Context context, SpannableString spannableString, Pattern pattern, int start,boolean showHX) {
         Matcher matcher = pattern.matcher(spannableString);
         while (matcher.find()) {
             String key = matcher.group();
@@ -219,27 +289,53 @@ public class AppUtil {
             if (matcher.start() < start) {
                 continue;
             }
-            if(AppUtil.getInstance().getFaceMap().containsKey(key)){
-                int resId = AppUtil.getInstance().getFaceMap().get(key);
-                if (resId != 0) {
-                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId, options);
-                    if(bitmap!=null){
-                        WeakReference<Bitmap> weakReference=new WeakReference<>(bitmap);
-                        // 通过图片资源id来得到bitmap，用一个ImageSpan来包装
-                        ImageSpan imageSpan = new ImageSpan(context,weakReference.get());
-                        // 计算该图片名字的长度，也就是要替换的字符串的长度
-                        int end = matcher.start() + key.length();
-                        // 将该图片替换字符串中规定的位置中
-                        spannableString.setSpan(imageSpan, matcher.start(), end,
-                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-                        if (end < spannableString.length()) {
-                            // 如果整个字符串还未验证完，则继续。。
-                            dealExpression(context, spannableString, pattern, end);
+
+            if(showHX){
+                if(AppUtil.getInstance().getFaceMapHX().containsKey(key)){
+                    int resId = AppUtil.getInstance().getFaceMapHX().get(key);
+                    if (resId != 0) {
+                        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId, options);
+                        if(bitmap!=null){
+                            WeakReference<Bitmap> weakReference=new WeakReference<>(bitmap);
+                            // 通过图片资源id来得到bitmap，用一个ImageSpan来包装
+                            ImageSpan imageSpan = new ImageSpan(context,weakReference.get());
+                            // 计算该图片名字的长度，也就是要替换的字符串的长度
+                            int end = matcher.start() + key.length();
+                            // 将该图片替换字符串中规定的位置中
+                            spannableString.setSpan(imageSpan, matcher.start(), end,
+                                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                            if (end < spannableString.length()) {
+                                // 如果整个字符串还未验证完，则继续。。
+                                dealExpression(context, spannableString, pattern, end, showHX);
+                            }
                         }
+                        break;
                     }
-                    break;
+                }
+            }else{
+                if(AppUtil.getInstance().getFaceMap().containsKey(key)){
+                    int resId = AppUtil.getInstance().getFaceMap().get(key);
+                    if (resId != 0) {
+                        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId, options);
+                        if(bitmap!=null){
+                            WeakReference<Bitmap> weakReference=new WeakReference<>(bitmap);
+                            // 通过图片资源id来得到bitmap，用一个ImageSpan来包装
+                            ImageSpan imageSpan = new ImageSpan(context,weakReference.get());
+                            // 计算该图片名字的长度，也就是要替换的字符串的长度
+                            int end = matcher.start() + key.length();
+                            // 将该图片替换字符串中规定的位置中
+                            spannableString.setSpan(imageSpan, matcher.start(), end,
+                                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                            if (end < spannableString.length()) {
+                                // 如果整个字符串还未验证完，则继续。。
+                                dealExpression(context, spannableString, pattern, end, showHX);
+                            }
+                        }
+                        break;
+                    }
                 }
             }
+
         }
     }
 
