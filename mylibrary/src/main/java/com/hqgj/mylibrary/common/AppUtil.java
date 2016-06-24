@@ -52,7 +52,7 @@ public class AppUtil {
     }
 
     public void init(){
-        initFaceMap();
+        initFaceMap1();
         NUM_PAGE = (int) Math.ceil(mFaceMap.size() / 20.0);
 
     }
@@ -110,7 +110,120 @@ public class AppUtil {
     }
 
 
+    private void initFaceMap1() {
+        mFaceMap.put("[emoji_1]", R.drawable.emoji_1);
+        mFaceMap.put("[emoji_2]", R.drawable.emoji_2);
+        mFaceMap.put("[emoji_3]", R.drawable.emoji_3);
+        mFaceMap.put("[emoji_4]", R.drawable.emoji_4);
+        mFaceMap.put("[emoji_5]", R.drawable.emoji_5);
+        mFaceMap.put("[emoji_6]", R.drawable.emoji_6);
+        mFaceMap.put("[emoji_7]", R.drawable.emoji_7);
+        mFaceMap.put("[emoji_8]", R.drawable.emoji_8);
+        mFaceMap.put("[emoji_9]", R.drawable.emoji_9);
+        mFaceMap.put("[emoji_10]", R.drawable.emoji_10);
+        mFaceMap.put("[emoji_11]", R.drawable.emoji_11);
+        mFaceMap.put("[emoji_12]", R.drawable.emoji_12);
+        mFaceMap.put("[emoji_13]", R.drawable.emoji_13);
+        mFaceMap.put("[emoji_14]", R.drawable.emoji_14);
+        mFaceMap.put("[emoji_15]", R.drawable.emoji_15);
+        mFaceMap.put("[emoji_16]", R.drawable.emoji_16);
+        mFaceMap.put("[emoji_17]", R.drawable.emoji_17);
+        mFaceMap.put("[emoji_18]", R.drawable.emoji_18);
+        mFaceMap.put("[emoji_19]", R.drawable.emoji_19);
+        mFaceMap.put("[emoji_20]", R.drawable.emoji_20);
+        mFaceMap.put("[emoji_21]", R.drawable.emoji_21);
+        mFaceMap.put("[emoji_22]", R.drawable.emoji_22);
+        mFaceMap.put("[emoji_23]", R.drawable.emoji_23);
+        mFaceMap.put("[emoji_24]", R.drawable.emoji_24);
+        mFaceMap.put("[emoji_25]", R.drawable.emoji_25);
+        mFaceMap.put("[emoji_26]", R.drawable.emoji_26);
+        mFaceMap.put("[emoji_27]", R.drawable.emoji_27);
+        mFaceMap.put("[emoji_28]", R.drawable.emoji_28);
+        mFaceMap.put("[emoji_29]", R.drawable.emoji_29);
+        mFaceMap.put("[emoji_30]", R.drawable.emoji_30);
+        mFaceMap.put("[emoji_31]", R.drawable.emoji_31);
+        mFaceMap.put("[emoji_32]", R.drawable.emoji_32);
+        mFaceMap.put("[emoji_33]", R.drawable.emoji_33);
+        mFaceMap.put("[emoji_34]", R.drawable.emoji_34);
+        mFaceMap.put("[emoji_35]", R.drawable.emoji_35);
+        mFaceMap.put("[emoji_36]", R.drawable.emoji_36);
+        mFaceMap.put("[emoji_37]", R.drawable.emoji_37);
+        mFaceMap.put("[emoji_38]", R.drawable.emoji_38);
+        mFaceMap.put("[emoji_39]", R.drawable.emoji_39);
+        mFaceMap.put("[emoji_40]", R.drawable.emoji_40);
+        mFaceMap.put("[emoji_41]", R.drawable.emoji_41);
+        mFaceMap.put("[emoji_42]", R.drawable.emoji_42);
+        mFaceMap.put("[emoji_43]", R.drawable.emoji_43);
+        mFaceMap.put("[emoji_44]", R.drawable.emoji_44);
+        mFaceMap.put("[emoji_45]", R.drawable.emoji_45);
+        mFaceMap.put("[emoji_46]", R.drawable.emoji_46);
+        mFaceMap.put("[emoji_47]", R.drawable.emoji_47);
+        mFaceMap.put("[emoji_48]", R.drawable.emoji_48);
+        mFaceMap.put("[emoji_49]", R.drawable.emoji_49);
+        mFaceMap.put("[emoji_50]", R.drawable.emoji_50);
+        mFaceMap.put("[emoji_51]", R.drawable.emoji_51);
+        mFaceMap.put("[emoji_52]", R.drawable.emoji_52);
+        mFaceMap.put("[emoji_53]", R.drawable.emoji_53);
+        mFaceMap.put("[emoji_54]", R.drawable.emoji_54);
+        mFaceMap.put("[emoji_55]", R.drawable.emoji_55);
+        mFaceMap.put("[emoji_56]", R.drawable.emoji_56);
+        mFaceMap.put("[emoji_57]", R.drawable.emoji_57);
+        mFaceMap.put("[emoji_58]", R.drawable.emoji_58);
+        mFaceMap.put("[emoji_59]", R.drawable.emoji_59);
+        mFaceMap.put("[emoji_60]", R.drawable.emoji_60);
+        mFaceMap.put("[emoji_61]", R.drawable.emoji_61);
+        mFaceMap.put("[emoji_62]", R.drawable.emoji_62);
+        mFaceMap.put("[emoji_63]", R.drawable.emoji_63);
+        mFaceMap.put("[emoji_64]", R.drawable.emoji_64);
+        mFaceMap.put("[emoji_65]", R.drawable.emoji_65);
+        mFaceMap.put("[emoji_66]", R.drawable.emoji_66);
+        mFaceMap.put("[emoji_67]", R.drawable.emoji_67);
+        mFaceMap.put("[emoji_68]", R.drawable.emoji_68);
+        mFaceMap.put("[emoji_69]", R.drawable.emoji_69);
+        mFaceMap.put("[emoji_70]", R.drawable.emoji_70);
+        mFaceMap.put("[emoji_71]", R.drawable.emoji_71);
+        mFaceMap.put("[emoji_72]", R.drawable.emoji_72);
+        mFaceMap.put("[emoji_73]", R.drawable.emoji_73);
+        mFaceMap.put("[emoji_74]", R.drawable.emoji_74);
+        mFaceMap.put("[emoji_75]", R.drawable.emoji_75);
+        mFaceMap.put("[emoji_76]", R.drawable.emoji_76);
+        mFaceMap.put("[emoji_77]", R.drawable.emoji_77);
+        mFaceMap.put("[emoji_78]", R.drawable.emoji_78);
+        mFaceMap.put("[emoji_79]", R.drawable.emoji_79);
+        mFaceMap.put("[emoji_80]", R.drawable.emoji_80);
+        mFaceMap.put("[emoji_81]", R.drawable.emoji_81);
+        mFaceMap.put("[emoji_82]", R.drawable.emoji_82);
+        mFaceMap.put("[emoji_83]", R.drawable.emoji_83);
+        mFaceMap.put("[emoji_84]", R.drawable.emoji_84);
+        mFaceMap.put("[emoji_85]", R.drawable.emoji_85);
+        mFaceMap.put("[emoji_86]", R.drawable.emoji_86);
+        mFaceMap.put("[emoji_87]", R.drawable.emoji_87);
+        mFaceMap.put("[emoji_88]", R.drawable.emoji_88);
+        mFaceMap.put("[emoji_89]", R.drawable.emoji_89);
+        mFaceMap.put("[emoji_90]", R.drawable.emoji_90);
+        mFaceMap.put("[emoji_91]", R.drawable.emoji_91);
+        mFaceMap.put("[emoji_92]", R.drawable.emoji_92);
+        mFaceMap.put("[emoji_93]", R.drawable.emoji_93);
+        mFaceMap.put("[emoji_94]", R.drawable.emoji_94);
+        mFaceMap.put("[emoji_95]", R.drawable.emoji_95);
+        mFaceMap.put("[emoji_96]", R.drawable.emoji_96);
+        mFaceMap.put("[emoji_97]", R.drawable.emoji_97);
+        mFaceMap.put("[emoji_98]", R.drawable.emoji_98);
+        mFaceMap.put("[emoji_99]", R.drawable.emoji_99);
+        mFaceMap.put("[emoji_100]", R.drawable.emoji_100);
+        mFaceMap.put("[emoji_101]", R.drawable.emoji_101);
+        mFaceMap.put("[emoji_102]", R.drawable.emoji_102);
+        mFaceMap.put("[emoji_103]", R.drawable.emoji_103);
+        mFaceMap.put("[emoji_104]", R.drawable.emoji_104);
+        mFaceMap.put("[emoji_105]", R.drawable.emoji_105);
+        mFaceMap.put("[emoji_106]", R.drawable.emoji_106);
+        mFaceMap.put("[emoji_107]", R.drawable.emoji_107);
+
+
+
+    }
     private void initFaceMap() {
+
         mFaceMap.put("[呲牙]", R.drawable.emoji_1);
         mFaceMap.put("[调皮]", R.drawable.emoji_2);
         mFaceMap.put("[流汗]", R.drawable.emoji_3);
